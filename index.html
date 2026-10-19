@@ -3,171 +3,440 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>记雨 · Raintie</title>
+<title>记雨 · 把认识的人，记成一本册子</title>
+<meta name="description" content="记雨是一款私人的人际档案本。按人组织，故事和关系分开记，串成时间轴。不联网、不注册，数据只存在你的手机里。">
+<meta name="theme-color" content="#FBFAF7">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4c4.2 5.6 7 9.4 7 13a7 7 0 1 1-14 0c0-3.6 2.8-7.4 7-13z' fill='%232E7D8F'/%3E%3C/svg%3E">
 <style>
-  :root {
-    --bg: #FAFAFA;
-    --text: #1A1A1A;
-    --sub: #8A8A8A;
-    --primary: #1A1A1A;
-    --divider: #EEEEEE;
+  :root{
+    --paper:#FBFAF7;
+    --paper-2:#F4F2EC;
+    --ink:#1A1A1A;
+    --ink-2:#6E6B63;
+    --ink-3:#9C9890;
+    --line:#E4E0D6;
+    --accent:#2E7D8F;
+    --accent-soft:#E7F0F2;
+    --radius:14px;
+    --serif:"Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
   }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
-      "Helvetica Neue", "Microsoft YaHei", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.6;
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    background:var(--paper);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;
   }
-  .wrap {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 56px 24px 48px;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  a{color:inherit;text-decoration:none}
+  .wrap{width:100%;max-width:1060px;margin:0 auto;padding:0 24px}
+
+  /* ---------- nav ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(251,250,247,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;gap:28px;height:64px}
+  .brand{display:flex;align-items:center;gap:9px;font-family:var(--serif);font-size:19px;letter-spacing:.06em}
+  .brand svg{width:19px;height:19px;display:block}
+  .nav-links{display:flex;gap:26px;margin-left:auto;font-size:14.5px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav .btn-sm{
+    margin-left:0;padding:8px 16px;border-radius:999px;background:var(--ink);color:#fff;
+    font-size:14px;line-height:1.4;transition:.18s;
   }
-  .icon {
-    width: 108px;
-    height: 108px;
-    border-radius: 26px;
-    object-fit: cover;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+  .nav .btn-sm:hover{background:#000;transform:translateY(-1px)}
+  @media(max-width:720px){.nav-links{display:none}.nav .btn-sm{margin-left:auto}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;padding:84px 0 76px}
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:repeating-linear-gradient(102deg,rgba(46,125,143,.055) 0 1px,transparent 1px 13px);
+    mask-image:radial-gradient(ellipse 70% 80% at 78% 18%,#000 0%,transparent 72%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 80% at 78% 18%,#000 0%,transparent 72%);
   }
-  h1 {
-    margin: 26px 0 0;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 6px;
-    text-align: center;
-    padding-left: 6px;
+  .hero-inner{position:relative;display:grid;grid-template-columns:1.06fr .94fr;gap:56px;align-items:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-size:12.5px;letter-spacing:.14em;
+    color:var(--accent);text-transform:uppercase;margin-bottom:22px;
   }
-  .sub {
-    margin: 8px 0 0;
-    font-size: 13px;
-    color: var(--sub);
-    letter-spacing: 3px;
-    text-align: center;
-    text-transform: uppercase;
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--accent);opacity:.5}
+  h1{font-family:var(--serif);font-size:clamp(34px,4.4vw,52px);line-height:1.28;letter-spacing:.02em;font-weight:600}
+  .lede{margin-top:22px;font-size:16.5px;color:var(--ink-2);max-width:31em}
+  .lede b{color:var(--ink);font-weight:600}
+  .cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:34px}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;padding:13px 26px;border-radius:999px;
+    background:var(--ink);color:#fff;font-size:15px;transition:.18s;
   }
-  .divider {
-    width: 36px;
-    height: 2px;
-    background: var(--divider);
-    margin: 30px 0;
-    border-radius: 1px;
+  .btn:hover{background:#000;transform:translateY(-1px);box-shadow:0 10px 24px -12px rgba(0,0,0,.5)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn.ghost:hover{background:var(--paper-2);box-shadow:none}
+  .btn .sz{font-size:12.5px;opacity:.6;font-weight:400}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:24px;font-size:13px;color:var(--ink-3)}
+  .hero-meta span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:3px;height:3px;border-radius:50%;background:var(--ink-3)}
+
+  /* ---------- phone ---------- */
+  .phone{
+    position:relative;width:100%;max-width:292px;margin:0 auto;aspect-ratio:9/18.6;
+    background:#fff;border-radius:34px;border:1px solid var(--line);
+    box-shadow:0 30px 70px -40px rgba(26,26,26,.45),0 2px 6px rgba(26,26,26,.05);
+    padding:20px 16px;overflow:hidden;
   }
-  .intro {
-    font-size: 15px;
-    line-height: 1.95;
-    text-align: center;
-    color: var(--text);
-    margin: 0;
-    max-width: 340px;
+  .phone::after{
+    content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:52px;height:5px;border-radius:99px;background:#EDEAE2;
   }
-  .points {
-    margin: 30px 0 0;
-    padding: 0;
-    list-style: none;
-    width: 100%;
-    max-width: 340px;
+  .p-head{display:flex;align-items:baseline;justify-content:space-between;margin:14px 2px 4px}
+  .p-title{font-family:var(--serif);font-size:15px;letter-spacing:.04em}
+  .p-sub{font-size:10px;color:var(--ink-3)}
+  .p-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+  .p-card{
+    background:var(--paper);border:1px solid #EFECE4;border-radius:9px;
+    padding:9px 6px 8px;text-align:center;
   }
-  .points li {
-    font-size: 13px;
-    color: var(--sub);
-    padding: 5px 0;
-    text-align: center;
-    letter-spacing: 0.6px;
+  .p-ava{
+    width:26px;height:26px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;
+    font-family:var(--serif);font-size:11px;color:#fff;
   }
-  .points li::before {
-    content: "·";
-    margin-right: 8px;
-    color: var(--sub);
+  .p-name{font-size:10.5px;color:var(--ink);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-tag{font-size:8.5px;color:var(--ink-3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-line{margin-top:16px;padding-top:12px;border-top:1px solid #F1EEE7}
+  .p-line-t{font-size:9px;color:var(--ink-3);letter-spacing:.12em;margin-bottom:8px}
+  .p-item{display:flex;gap:7px;margin-bottom:9px}
+  .p-node{width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:5px;flex:none}
+  .p-node.gray{background:#D6D2C8}
+  .p-itxt{font-size:9.5px;line-height:1.5;color:var(--ink-2)}
+  .p-itxt b{display:block;color:var(--ink);font-weight:500;font-size:10px}
+  .p-foot{
+    position:absolute;left:16px;right:16px;bottom:14px;display:flex;justify-content:space-between;
+    font-size:9px;color:var(--ink-3);border-top:1px solid #F1EEE7;padding-top:9px;
   }
-  .btn {
-    display: block;
-    width: 100%;
-    max-width: 340px;
-    margin: 44px 0 0;
-    padding: 17px 24px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: transform .15s ease, opacity .15s ease;
+
+  /* ---------- sections ---------- */
+  section{padding:78px 0}
+  .sec-head{margin-bottom:44px;max-width:34em}
+  .sec-kicker{font-size:12.5px;letter-spacing:.16em;color:var(--accent);margin-bottom:12px}
+  h2{font-family:var(--serif);font-size:clamp(24px,2.8vw,32px);line-height:1.35;font-weight:600;letter-spacing:.02em}
+  .sec-head p{margin-top:12px;color:var(--ink-2);font-size:15.5px}
+
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .feat{background:var(--paper);padding:28px 26px 30px;transition:.2s}
+  .feat:hover{background:#fff}
+  .feat .no{font-family:var(--serif);font-size:12px;color:var(--ink-3);letter-spacing:.1em}
+  .feat h3{font-size:16px;margin:14px 0 8px;font-weight:600;letter-spacing:.02em}
+  .feat p{font-size:14.5px;color:var(--ink-2);line-height:1.8}
+  .feat .ex{margin-top:12px;font-size:12.5px;color:var(--ink-3);border-left:2px solid var(--accent-soft);padding-left:9px}
+
+  .strip{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0}
+  .strip .wrap{display:flex;flex-wrap:wrap;gap:10px 30px;align-items:center;font-size:13.5px;color:var(--ink-2)}
+  .strip b{color:var(--ink);font-weight:600}
+  .strip .sep{width:1px;height:14px;background:var(--line)}
+
+  /* ---------- download ---------- */
+  #download{padding-top:84px}
+  .dl-card{
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:34px 34px 30px;
+    display:grid;grid-template-columns:1fr auto;gap:28px;align-items:center;
+    box-shadow:0 24px 60px -46px rgba(26,26,26,.5);
   }
-  .btn:active {
-    transform: scale(0.97);
-    opacity: 0.9;
+  .dl-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .dl-badge{font-size:11.5px;letter-spacing:.1em;color:var(--accent);background:var(--accent-soft);padding:3px 9px;border-radius:999px}
+  .dl-name{font-family:var(--serif);font-size:21px;letter-spacing:.02em}
+  .dl-meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--ink-2)}
+  .dl-meta span{display:inline-flex;align-items:center;gap:6px}
+  .dl-hash{margin-top:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--ink-3);word-break:break-all;line-height:1.6}
+  .dl-actions{display:flex;flex-direction:column;gap:10px;align-items:stretch;min-width:190px}
+  .dl-actions .btn{justify-content:center}
+  .dl-alt{font-size:12.5px;color:var(--ink-3);text-align:center;margin-top:2px}
+  .dl-alt a{color:var(--ink-2);text-decoration:underline;text-underline-offset:3px}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:44px}
+  .step{font-size:14px;color:var(--ink-2)}
+  .step .n{
+    width:24px;height:24px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;
+    font-size:12px;color:var(--ink);margin-bottom:10px;background:var(--paper);
   }
-  .link {
-    display: block;
-    margin: 18px 0 0;
-    color: var(--sub);
-    font-size: 13px;
-    text-decoration: none;
-    letter-spacing: 0.6px;
-    padding: 6px 12px;
+  .step b{display:block;color:var(--ink);font-weight:600;font-size:14.5px;margin-bottom:2px}
+
+  /* ---------- faq ---------- */
+  .faq{border-top:1px solid var(--line)}
+  .qa{border-bottom:1px solid var(--line)}
+  .qa summary{
+    list-style:none;cursor:pointer;padding:20px 30px 20px 0;position:relative;
+    font-size:15.5px;color:var(--ink);display:flex;align-items:center;gap:10px;
   }
-  .link:active { opacity: 0.6; }
-  .foot {
-    margin-top: auto;
-    padding-top: 56px;
-    font-size: 12px;
-    color: var(--sub);
-    letter-spacing: 1.5px;
-    text-align: center;
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::after{
+    content:"";position:absolute;right:4px;top:50%;width:7px;height:7px;
+    border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);
+    transform:translateY(-70%) rotate(45deg);transition:.2s;
+  }
+  .qa[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+  .qa p{padding:0 0 22px;font-size:14.5px;color:var(--ink-2);max-width:52em}
+  .qa p code{background:var(--paper-2);padding:1px 5px;border-radius:4px;font-size:13px}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:34px 0 46px;font-size:13px;color:var(--ink-3)}
+  .foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+  .foot-l{display:flex;align-items:center;gap:10px}
+  .foot a:hover{color:var(--ink-2)}
+  .foot-links{display:flex;gap:20px}
+
+  .js .reveal{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}
+  .js .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
+
+  @media(max-width:900px){
+    .hero{padding:56px 0 56px}
+    .hero-inner{grid-template-columns:1fr;gap:44px}
+    .phone{max-width:260px}
+    .features{grid-template-columns:repeat(2,1fr)}
+    .dl-card{grid-template-columns:1fr;gap:22px}
+    .dl-actions{flex-direction:row;flex-wrap:wrap}
+    .dl-actions .btn{flex:1;min-width:150px}
+    .steps{grid-template-columns:1fr;gap:20px}
+    section{padding:60px 0}
+  }
+  @media(max-width:560px){
+    .features{grid-template-columns:1fr}
+    .hero-meta{gap:6px 14px}
+    h1{font-size:31px}
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
 
-    <img class="icon"
-         src="https://avatars.githubusercontent.com/u/153488973?v=4"
-         alt="记雨图标">
-
-    <h1>记雨</h1>
-    <p class="sub">Raintie</p>
-
-    <div class="divider"></div>
-
-    <p class="intro">
-      一个离线、私密的 Android 人际档案本。<br>
-      以人为中心，记录重要的人、照片、故事与关系变化。
-    </p>
-
-    <ul class="points">
-      <li>不联网 · 不注册 · 不追踪</li>
-      <li>数据只存本地</li>
-      <li>用时间去记录，用记录去留住</li>
-    </ul>
-
-    <a class="btn"
-       href="https://raw.githubusercontent.com/32555599/Raintie/refs/heads/main/%E8%AE%B0%E9%9B%A8_1.4.apk"
-       download>
-      下载 APK · v1.4
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4c4.2 5.6 7 9.4 7 13a7 7 0 1 1-14 0c0-3.6 2.8-7.4 7-13z" fill="none" stroke="#2E7D8F" stroke-width="1.6"/></svg>
+      记雨
     </a>
-
-    <a class="link"
-       href="https://github.com/32555599/Raintie"
-       target="_blank" rel="noopener">
-      查看 GitHub 项目 →
-    </a>
-
-    <p class="foot">记雨 · Raintie</p>
-
+    <nav class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#download">下载</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <a class="btn-sm" href="#download">下载 APK</a>
   </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <div class="eyebrow">私人的人际档案本 · v4.6</div>
+        <h1>把认识的人，<br>记成一本册子。</h1>
+        <p class="lede">
+          记雨不是通讯录。它记的是<b>这个人是谁、你们怎么认识、一起经历过什么</b>。
+          按人组织，不是按笔记；故事和关系分开记，可以串成一条时间轴。
+        </p>
+        <div class="cta">
+          <a class="btn" href="https://github.com/32555599/Raintie/releases/latest/download/Raintie-4.6.apk" download>下载 Android 版 <span class="sz">9.1 MB</span></a>
+          <a class="btn ghost" href="#features">看看能做什么</a>
+        </div>
+        <div class="hero-meta">
+          <span>不联网</span><i class="dot"></i>
+          <span>不注册</span><i class="dot"></i>
+          <span>数据只在本机</span>
+        </div>
+      </div>
+
+      <div class="phone reveal" aria-hidden="true">
+        <div class="p-head">
+          <div class="p-title">我的册子</div>
+          <div class="p-sub">18 人</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-card"><div class="p-ava" style="background:#2E7D8F">林</div><div class="p-name">林知夏</div><div class="p-tag">老同学</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#A0522D">周</div><div class="p-name">周叙</div><div class="p-tag">同事</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#7B6CA8">阿</div><div class="p-name">阿墨</div><div class="p-tag">爱读书</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#5C8348">陈</div><div class="p-name">陈见山</div><div class="p-tag">靠谱</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#E85A4F">小</div><div class="p-name">小满</div><div class="p-tag">邻居</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#6E6B63">沈</div><div class="p-name">沈言</div><div class="p-tag">朋友</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#C9A227">苏</div><div class="p-name">苏晚</div><div class="p-tag">同学</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#2F5D50">何</div><div class="p-name">何一</div><div class="p-tag">球友</div></div>
+          <div class="p-card"><div class="p-ava" style="background:#8A4B5C">顾</div><div class="p-name">顾南</div><div class="p-tag">旧识</div></div>
+        </div>
+        <div class="p-line">
+          <div class="p-line-t">最 近 的 事</div>
+          <div class="p-item"><i class="p-node"></i><div class="p-itxt"><b>一起看流星雨</b>和林知夏 · 10 月 12 日</div></div>
+          <div class="p-item"><i class="p-node"></i><div class="p-itxt"><b>从同事变成朋友</b>周叙 · 9 月 28 日</div></div>
+          <div class="p-item"><i class="p-node gray"></i><div class="p-itxt"><b>借走那本《雨》</b>阿墨 · 8 月 30 日</div></div>
+        </div>
+        <div class="p-foot"><span>待整理 3 条</span><span>时间轴 ›</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-kicker">F E A T U R E S</div>
+        <h2>六件事，一件一件记清楚</h2>
+        <p>不用一次填满。先记名字，慢慢补。</p>
+      </div>
+      <div class="features reveal">
+        <div class="feat">
+          <div class="no">01</div>
+          <h3>按人建档</h3>
+          <p>姓名、电话、生日、工作、城市，加上关系、标签、备注。一个人一块地方，想回忆谁，点开他，全都在。</p>
+          <div class="ex">标签写短词：「靠谱」「不吃辣」</div>
+        </div>
+        <div class="feat">
+          <div class="no">02</div>
+          <h3>故事与关系</h3>
+          <p>「一起看流星雨」是故事，「从朋友变恋人」是关系。两条线分开记，各自成表，不会混成一团。</p>
+          <div class="ex">只在真的变化时记关系节点</div>
+        </div>
+        <div class="feat">
+          <div class="no">03</div>
+          <h3>一条时间轴</h3>
+          <p>所有人和你之间的事，按日期从近到远排成一条流。可以按人、按类型、按年月筛选。</p>
+          <div class="ex">点任一条，跳到那个人并高亮那件事</div>
+        </div>
+        <div class="feat">
+          <div class="no">04</div>
+          <h3>图库</h3>
+          <p>照片挂在人下面，能加标题、写描述、标收藏，还能关联到某段故事。删掉的进照片回收站，30 天内可恢复。</p>
+          <div class="ex">长按拖动排序，右侧滑轨快速定位</div>
+        </div>
+        <div class="feat">
+          <div class="no">05</div>
+          <h3>让 AI 帮你整理</h3>
+          <p>不内置 AI。复制提示词发给任意 AI，把这个人描述一遍，再把返回的 JSON 粘回来，档案自动填好。</p>
+          <div class="ex">一次描述多个人也行，会拆开逐个确认</div>
+        </div>
+        <div class="feat">
+          <div class="no">06</div>
+          <h3>只存在你的手机里</h3>
+          <p>不联网、不注册、不登录。应用锁用数字密码或图案，数据管理里可以把全部内容打包成 zip 备份。</p>
+          <div class="ex">换手机之前，记得先导出一次</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="wrap">
+      <span><b>十几套配色</b>，含深色</span><i class="sep"></i>
+      <span><b>自定义背景</b>，旧图自动进历史</span><i class="sep"></i>
+      <span><b>信息密度</b>可调，每行几列你说了算</span><i class="sep"></i>
+      <span>搜名字、拼音首字母、标签、故事内容</span>
+    </div>
+  </div>
+
+  <section id="download">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-kicker">D O W N L O A D</div>
+        <h2>下载记雨</h2>
+        <p>安卓手机直接安装。安装包不大，也不用连网激活。</p>
+      </div>
+
+      <div class="dl-card reveal">
+        <div>
+          <div class="dl-top">
+            <span class="dl-badge">v4.6</span>
+            <span class="dl-name">记雨 · Android</span>
+          </div>
+          <div class="dl-meta">
+            <span>9.1 MB</span><i class="dot"></i>
+            <span>2026-10-19 更新</span><i class="dot"></i>
+            <span>安装包 Raintie-4.6.apk</span>
+          </div>
+          <div class="dl-hash">SHA-256 f2dc3e379f6998e15965831c83f269cc518af6a9126e6a16a6f2e67dc4faf995</div>
+        </div>
+        <div class="dl-actions">
+          <a class="btn" href="https://github.com/32555599/Raintie/releases/latest/download/Raintie-4.6.apk" download>下载 APK</a>
+          <a class="btn ghost" href="https://github.com/32555599/Raintie/releases/latest" target="_blank" rel="noopener">GitHub 下载</a>
+          <div class="dl-alt">安装包来自官方发布，不含源码</div>
+        </div>
+      </div>
+
+      <div class="steps reveal">
+        <div class="step">
+          <div class="n">1</div>
+          <b>下载 APK</b>
+          点上面的按钮，保存到手机。
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <b>允许安装</b>
+          系统提示「未知来源」时，选择允许这一次即可。
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <b>打开就能用</b>
+          不用注册、不用登录，数据只写在本机。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-kicker">Q &amp; A</div>
+        <h2>常见问题</h2>
+      </div>
+      <div class="reveal">
+        <details class="qa" open>
+          <summary>需要注册、登录或者联网吗？</summary>
+          <p>都不需要。记雨没有账号体系，也没有服务器，装好就能记。所有人物、故事、照片都写在你手机本地。</p>
+        </details>
+        <details class="qa">
+          <summary>数据会上传到哪儿吗？</summary>
+          <p>不会。App 不申请网络权限，也就没有上传这回事。要转移数据，用「设置 → 数据管理 → 导出」，会打包成一个 zip，可以发微信、存网盘、放电脑，再到新手机上恢复。</p>
+        </details>
+        <details class="qa">
+          <summary>为什么不内置 AI？</summary>
+          <p>内置 AI 意味着要联网、要有账号，也意味着你写的东西得离开手机。记雨的做法是只提供提示词：你自己选一个 AI，把描述发过去，再把它返回的结果粘回来。整理照样快，数据不用出门。</p>
+        </details>
+        <details class="qa">
+          <summary>删掉的人和照片还能找回来吗？</summary>
+          <p>能。人物和照片各有一个回收站，删除后 30 天内随时可以恢复，过期才自动清理。</p>
+        </details>
+        <details class="qa">
+          <summary>收费吗？</summary>
+          <p>基础功能免费。少数专属配色属于 VIP，不影响记录和导出。</p>
+        </details>
+        <details class="qa">
+          <summary>会公开源码吗？</summary>
+          <p>不会。GitHub 上只提供安装包和说明，代码不开源。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-l">
+      <svg width="15" height="15" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 4c4.2 5.6 7 9.4 7 13a7 7 0 1 1-14 0c0-3.6 2.8-7.4 7-13z" fill="none" stroke="#9C9890" stroke-width="1.8"/></svg>
+      <span>记雨 · Raintie　© 2026</span>
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/32555599/Raintie" target="_blank" rel="noopener">GitHub</a>
+      <a href="#download">下载</a>
+      <a href="#top">回到顶部</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    document.documentElement.classList.add('js');
+    var els = document.querySelectorAll('.reveal');
+    function showAll() { els.forEach(function (el) { el.classList.add('in'); }); }
+    if (!('IntersectionObserver' in window)) { showAll(); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) { io.observe(el); });
+    setTimeout(showAll, 2200);
+  })();
+</script>
 </body>
 </html>
