@@ -10,7 +10,7 @@
 
 **不联网、不注册、不登录，数据只在手机本地。**
 
-官网：https://61cf40d5075a4f8aaba32d912f11ac2c.sg.agentos-app.run ｜ 频道：https://t.me/Raintie99
+官网：https://26fe91dd94284741bd0e1585f834a105.sg.agentos-app.run ｜ 频道：https://t.me/Raintie99
 
 ---
 
